@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Book Details - Bedimcode</title>
+</head>
+<body>
+    <main class="main">
+        <section class="section book-detail">
+            <div class="book-detail__container container grid">
+                <div class="book-detail__image">
+                    <img id="bookImage" src="" alt="Book Image" class="featured__img">
+                </div>
+                <div class="book-detail__data">
+                    <h2 id="bookTitle" class="book-detail__title"></h2>
+                    <p id="bookAuthor" class="book-detail__author"><strong>Author:</strong></p>
+                    <p id="bookDescription" class="book-detail__description"></p>
+                    <button class="button button--favorite"><i class="ri-heart-line"></i> Add to Favorites</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var bookId = urlParams.get('id'); // Use 'id' to match the parameter name in the main.js
+
+            if (bookId) {
+                fetch('http://localhost:3000/api/book/' + bookId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            console.error(data.message);
+                        } else {
+                            document.getElementById('bookTitle').innerText = data.title;
+                            document.getElementById('bookAuthor').innerText = 'Author: ' + data.author;
+                            document.getElementById('bookDescription').innerText = data.description;
+                            document.getElementById('bookImage').src = data.image_url; // Use image_url from the response
+                        }
+                    })
+                    .catch(error => console.error('Error fetching book details:', error));
+            } else {
+                console.error('No book ID provided in URL');
+            }
+        });
+    </script>
+</body>
+</html>
